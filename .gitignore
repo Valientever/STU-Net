@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -20,6 +19,10 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# Ignore build folders except in HECKTOR2025-MEDAI
+build/
+!HECKTOR2025-MEDAI/**/build/
 
 # Virtual Environment
 venv/
@@ -60,7 +63,20 @@ logs/
 *.temp
 .cache/
 
-#reports
-input_data/*
-output_data/*
-visualizations/*
+# Reports and output
+input_data/
+output_data/
+visualizations/
+results/
+results_2/
+
+# Downloaded model repos (can be re-cloned if needed)
+hecktor_2020/
+
+# Large weight files inside HECKTOR2025-MEDAI
+HECKTOR2025-MEDAI/weights/
+
+
+# Model weights (large files)
+*.pt
+*.zip
