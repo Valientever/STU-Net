@@ -47,8 +47,16 @@ data/
 
 # Model files - Very large
 *.model
-*.pth
 *.ckpt
+
+# Model weights (large files) - exclude .pth but allow config JSONs
+*.pth
+*.pt
+
+# Keep model config files (exclude only the weights)
+# STUNetTrainer_small__nnUNetPlans__3d_fullres/ contains:
+#   - dataset.json, plans.json, dataset_fingerprint.json (KEEP - small config files)
+#   - fold_*/checkpoint_final.pth (EXCLUDE - large ~112MB each)
 
 # Jupyter
 .ipynb_checkpoints/
