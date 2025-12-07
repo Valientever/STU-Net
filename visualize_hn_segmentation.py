@@ -19,13 +19,13 @@ import pyvista as pv
 from pathlib import Path
 from skimage import measure
 
-# Fix numpy compatibility for older skimage
+# Fix numpy compatibility for older skimage (NumPy 2.0+ compatibility)
 if not hasattr(np, 'bool'):
-    np.bool = np.bool_
+    np.bool = bool
 if not hasattr(np, 'int'):
-    np.int = np.int_
+    np.int = int
 if not hasattr(np, 'float'):
-    np.float = np.float_
+    np.float = float
 
 # Start Xvfb for headless rendering
 try:
