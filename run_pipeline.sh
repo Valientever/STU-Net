@@ -2,8 +2,15 @@
 # Head & Neck Cancer Segmentation Pipeline
 # Uses STU-Net trained on HECKTOR dataset
 #
-# IMPORTANT: Run this from the 'base' or 'aortic_seg' conda environment, NOT 'hncancer'
-# Example: conda activate base && ./run_pipeline.sh
+# Usage:
+#   ./run_pipeline.sh [OUTPUT_NAME]
+#
+# Arguments:
+#   OUTPUT_NAME  Optional name for output subfolder (default: PATIENT_ID)
+#
+# IMPORTANT: Run this from the 'hncancer' conda environment
+# Example: conda activate hncancer && ./run_pipeline.sh
+# Example with custom output: conda activate hncancer && ./run_pipeline.sh CHUM-002_fold9
 
 set -e  # Exit on error
 
@@ -17,7 +24,10 @@ OUTPUT_DIR="$PROJECT_DIR/output_data"
 
 # Patient configuration (modify these for your data)
 PATIENT_ID="CHUM-002"
-FOLDS="9"  # Use "0 1 2 3 4" for 5-fold ensemble (more accurate but slower)
+FOLDS="1"  # Use "0 1 2 3 4" for 5-fold ensemble (more accurate but slower)
+
+# Output folder name (from argument or default to PATIENT_ID)
+OUTPUT_NAME="${1:-$PATIENT_ID}"
 
 # Device settings
 USE_CPU="false"  # Set to "true" to force CPU inference
@@ -31,6 +41,7 @@ echo "$(timestamp) Pipeline parameters:"
 echo "$(timestamp)   PROJECT_DIR:  $PROJECT_DIR"
 echo "$(timestamp)   DATA_DIR:     $DATA_DIR"
 echo "$(timestamp)   PATIENT_ID:   $PATIENT_ID"
+echo "$(timestamp)   OUTPUT_NAME:  $OUTPUT_NAME"
 echo "$(timestamp)   FOLDS:        $FOLDS"
 echo "$(timestamp)   USE_CPU:      $USE_CPU"
 echo "$(timestamp) "
@@ -39,7 +50,7 @@ echo "$(timestamp) "
 echo "$(timestamp) STEP 1: Preparing input data..."
 
 PATIENT_INPUT="$INPUT_DIR/${PATIENT_ID}"
-PATIENT_OUTPUT="$OUTPUT_DIR/${PATIENT_ID}"
+PATIENT_OUTPUT="$OUTPUT_DIR/${OUTPUT_NAME}"
 mkdir -p "$PATIENT_INPUT"
 mkdir -p "$PATIENT_OUTPUT"
 
@@ -137,13 +148,13 @@ if [ -n "$ANATOMY_FILE" ] && [ -f "$ANATOMY_FILE" ]; then
         -i "$PATIENT_OUTPUT/${PATIENT_ID}.nii.gz" \
         -o "$PATIENT_OUTPUT/visualization" \
         --anatomy "$ANATOMY_FILE" \
-        --patient-id "$PATIENT_ID"
+        --patient-id "$OUTPUT_NAME"
 else
     # Fall back to basic visualization without anatomy
     python visualize_hn_segmentation.py \
         -i "$PATIENT_OUTPUT/${PATIENT_ID}.nii.gz" \
         -o "$PATIENT_OUTPUT/visualization" \
-        --patient-id "$PATIENT_ID"
+        --patient-id "$OUTPUT_NAME"
 fi
 
 echo "$(timestamp) ✓ Step 4 complete"
