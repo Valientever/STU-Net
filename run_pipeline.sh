@@ -11,6 +11,12 @@
 # IMPORTANT: Run this from the 'hncancer' conda environment
 # Example: conda activate hncancer && ./run_pipeline.sh
 # Example with custom output: conda activate hncancer && ./run_pipeline.sh CHUM-002_fold9
+#
+# Dependencies (in hncancer env):
+#   - dicom2nifti==2.4.8  (required for TotalSegmentator with pydicom 2.4.x)
+#   - TotalSegmentator
+#   - nnunetv2
+#   - pyvista
 
 set -e  # Exit on error
 
